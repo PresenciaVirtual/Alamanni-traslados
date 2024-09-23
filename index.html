@@ -62,7 +62,7 @@
       // Guardar en la base de datos de Firebase
       firebase.database().ref('users/' + userId).set(userData)
         .then(() => {
-          const qrData = `user-${userId}`;
+          const qrData = `https://presenciavirtual.github.io/Alamanni-traslados/user/${userId}`;
           QRCode.toCanvas(qrCodeCanvas, qrData, function (error) {
             if (error) console.error(error);
             console.log('Código QR generado!');
