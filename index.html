@@ -1,83 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generación y Escaneo de QR</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script> <!-- Para generar QR -->
-  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode@2.0.3/minified/html5-qrcode.min.js"></script> <!-- Para escanear QR -->
+  <title>Firebase QR Code App</title>
 </head>
 <body>
-  <h1>Registro de Usuario</h1>
-  <form id="userForm">
-    <label for="name">Nombre:</label>
-    <input type="text" id="name" required><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" required><br>
-    <button type="submit">Generar QR</button>
-  </form>
+  <!-- Canvas para generar el código QR -->
+  <canvas id="qrCodeCanvas"></canvas>
+  <div id="userInfo"></div>
 
-  <h2>Tu código QR</h2>
-  <canvas id="qrcode"></canvas>
-
-  <h2>Escanear QR</h2>
-  <div id="reader" style="width:300px;"></div>
-  <p id="userInfo"></p>
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <script>
-    // Configurar Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDlL3r5WRpnQaQO-2lzapM1u-TdpNJtRGE",
-      authDomain: "alamanni-traslados.firebaseapp.com",
-      databaseURL: "https://alamanni-traslados-default-rtdb.firebaseio.com/",
-      projectId: "alamanni-traslados",
-      storageBucket: "alamanni-traslados.appspot.com",
-      messagingSenderId: "55093809134",
-      appId: "1:55093809134:web:0c87c40e703ec1dd2d88ff"
-    };
-
-    // Inicializar Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // Obtener elementos del DOM
-    const userForm = document.getElementById('userForm');
-    const qrCodeCanvas = document.getElementById('qrcode');
-    const userInfo = document.getElementById('userInfo');
-
-    // Función para generar y guardar el QR del usuario
-    userForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const userId = Date.now(); // Crear un ID único para cada usuario
-
-      const userData = {
-        name: name,
-        email: email
+    document.addEventListener('DOMContentLoaded', () => {
+      // Configuración de Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyDlL3r5WRpnQaQO-2lzapM1u-TdpNJtRGE",
+        authDomain: "alamanni-traslados.firebaseapp.com",
+        projectId: "alamanni-traslados",
+        storageBucket: "alamanni-traslados.appspot.com",
+        messagingSenderId: "55093809134",
+        appId: "1:55093809134:web:0c87c40e703ec1dd2d88ff",
+        measurementId: "G-05WY4C1V32"
       };
 
-      // Guardar en la base de datos de Firebase
-      firebase.database().ref('users/' + userId).set(userData)
+      // Inicializar Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Referencia a la base de datos de Firebase
+      const database = firebase.database();
+
+      // Ejemplo de cómo guardar un nuevo usuario
+      const userId = 12345;  // Esto lo obtendrás dinámicamente
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com'
+      };
+
+      // Guardar la información del usuario en Firebase Realtime Database
+      database.ref('users/' + userId).set(userData)
         .then(() => {
-          const qrData = `https://presenciavirtual.github.io/Alamanni-traslados/user/${userId}`;
+          // Generar el código QR con la URL que contiene el userId
+          const qrData = `https://alamanni-traslados.firebaseapp.com/user/${userId}`;
+          const qrCodeCanvas = document.getElementById('qrCodeCanvas');
           QRCode.toCanvas(qrCodeCanvas, qrData, function (error) {
             if (error) console.error(error);
-            console.log('Código QR generado!');
+            console.log('Código QR generado con URL:', qrData);
           });
         })
         .catch((error) => {
           console.error('Error guardando la información: ', error);
         });
-    });
 
-    // Escanear QR y obtener información del usuario
-    function onScanSuccess(qrMessage) {
-      const userId = qrMessage.split('/').pop();
-      firebase.database().ref('users/' + userId).once('value')
+      // Obtener la información de un usuario al escanear el QR
+      const userInfo = document.getElementById('userInfo');
+      database.ref('users/' + userId).once('value')
         .then((snapshot) => {
           const data = snapshot.val();
           if (data) {
@@ -87,15 +66,9 @@
           }
         })
         .catch((error) => {
-          console.error('Error obteniendo los datos del usuario: ', error);
+          console.error('Error obteniendo la información del usuario: ', error);
         });
-    }
-
-    const html5QrCode = new Html5Qrcode("reader");
-    html5QrCode.start({ facingMode: "environment" }, {
-      fps: 10,
-      qrbox: 250
-    }, onScanSuccess);
+    });
   </script>
 </body>
 </html>
