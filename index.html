@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta nombre="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alamanni Traslados</title>
     <style>
         body {
@@ -57,7 +57,7 @@
 <div class="container">
     <h1>Agregar y Eliminar Pasajeros</h1>
     <form id="userForm">
-        <input type="text" id="name" placeholder="Nombre" required>
+        <input type="text" id="nombre" placeholder="Nombre" required>
         <input type="text" id="dni" placeholder="DNI" required>
         <input type="text" id="detail" placeholder="Detalle" required>
         <button type="submit">Agregar/Actualizar</button>
@@ -102,13 +102,13 @@
   userForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const name = document.getElementById('name').value;
+      const nombre = document.getElementById('nombre').value;
       const dni = document.getElementById('dni').value;
       const detail = document.getElementById('detail').value;
 
       if (dni) {
           set(ref(db, 'users/' + dni), {
-              name: name,
+              nombre: nombre,
               dni: dni,
               detail: detail,
               active: true  // Indicamos que el usuario está activo
@@ -150,7 +150,7 @@
           for (const dni in users) {
               if (users[dni].active) {  // Solo mostramos usuarios activos
                   const li = document.createElement('li');
-                  li.textContent = `Nombre: ${users[dni].name}, DNI: ${users[dni].dni}, Detalle: ${users[dni].detail}`;
+                  li.textContent = `Nombre: ${users[dni].nombre}, DNI: ${users[dni].dni}, Detalle: ${users[dni].detail}`;
                   userList.appendChild(li);
               }
           }
