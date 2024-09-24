@@ -58,14 +58,14 @@
     <h1>Agregar y Eliminar Pasajeros</h1>
     <form id="userForm">
         <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="text" id="dni" placeholder="DNI" required>
-        <input type="text" id="detail" placeholder="Detalle" required>
+        <input type="text" id="clave" placeholder="CLAVE" required>
+        <input type="text" id="dni" placeholder="Detalle" required>
         <button type="submit">Agregar/Actualizar</button>
     </form>
 
     <h2>Desactivar Pasajero</h2>
     <form id="deleteForm">
-        <input type="text" id="deleteDni" placeholder="DNI para desactivar" required>
+        <input type="text" id="deleteClave" placeholder="CLAVE para desactivar" required>
         <button type="submit">Desactivar</button>
     </form>
 
@@ -103,15 +103,15 @@
       e.preventDefault();
 
       const nombre = document.getElementById('nombre').value;
+      const clave = document.getElementById('clave').value;
       const dni = document.getElementById('dni').value;
-      const detail = document.getElementById('detail').value;
 
-      if (dni) {
-          set(ref(db, 'users/' + dni), {
+      if (clave) {
+          set(ref(db, 'users/' + clave), {
               nombre: nombre,
+              clave: clave,
               dni: dni,
-              detail: detail,
-              active: true  // Indicamos que el usuario está activo
+              active: true  // El usuario está activo
           }).then(() => {
               alert('Usuario agregado/actualizado');
               userForm.reset();
@@ -122,14 +122,14 @@
       }
   });
 
-  // Desactivar usuario por DNI
+  // Desactivar usuario por CLAVE
   deleteForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const deleteDni = document.getElementById('deleteDni').value;
+      const deleteClave = document.getElementById('deleteClave').value;
 
-      if (deleteDni) {
-          set(ref(db, 'users/' + deleteDni + '/active'), false)  // Cambiamos el estado a inactivo
+      if (deleteClave) {
+          set(ref(db, 'users/' + deleteClave + '/active'), false)  // Se cambia el estado a inactivo
               .then(() => {
                   alert('Usuario desactivado');
                   deleteForm.reset();
@@ -147,17 +147,17 @@
       onValue(usersRef, snapshot => {
           const users = snapshot.val();
           userList.innerHTML = '';
-          for (const dni in users) {
-              if (users[dni].active) {  // Solo mostramos usuarios activos
+          for (const clave in users) {
+              if (users[clave].active) {  // Solo se muestra usuarios activos
                   const li = document.createElement('li');
-                  li.textContent = `Nombre: ${users[dni].nombre}, DNI: ${users[dni].dni}, Detalle: ${users[dni].detail}`;
+                  li.textContent = `Nombre: ${users[clave].nombre}, Clave: ${users[clave].clave}, Dni: ${users[clave].dni}`;
                   userList.appendChild(li);
               }
           }
       });
   }
 
-  // Cargar usuarios al iniciar
+  // Se cargan los usuarios
   loadUsers();
 </script>
 
