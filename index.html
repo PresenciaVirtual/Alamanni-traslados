@@ -2,39 +2,52 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta nombre="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alamanni Traslados</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
+            background-color: #121212; /* Fondo negro */
+            color: #ffffff; /* Texto blanco */
         }
         .container {
-            max-width: 80%;
+            max-width: 90%;
             margin: 0 auto;
-            background: white;
+            background: #1e1e1e; /* Fondo oscuro para el contenedor */
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más profunda */
         }
-        h1 {
+        h1, h2 {
             text-align: center;
             margin-bottom: 20px;
+            color: #ffffff;
         }
         input, button {
             display: block;
-            width: 90%;
-            margin-bottom: 10px;
-            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 15px;
             font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        input {
+            background-color: #2e2e2e;
+            color: #ffffff;
+        }
+        input::placeholder {
+            color: #cccccc;
         }
         button {
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
@@ -44,10 +57,21 @@
             padding: 0;
         }
         li {
-            background: #e9ecef;
+            background: #333333;
             margin-bottom: 10px;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 8px;
+            color: #ffffff;
+        }
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+            input, button {
+                font-size: 14px;
+                padding: 12px;
+            }
         }
     </style>
     <link rel="icon" type="image/png" href="https://via.placeholder.com/16x16.png?text=A">
@@ -55,7 +79,7 @@
 <body>
 
 <div class="container">
-    <h1>Agregar y Eliminar Pasajeros</h1>
+    <h1>Agregar y Actualizar Pasajeros</h1>
     <form id="userForm">
         <input type="text" id="nombre" placeholder="Nombre" required>
         <input type="text" id="clave" placeholder="CLAVE (siempre en minuscula, ej: a1 mva011)" required>
@@ -83,7 +107,7 @@
     apiKey: "AIzaSyDr8zY0fJoppe4b-RWItFvWiGWW_tgYvO4",
     authDomain: "alamanni-traslados-fa9c5.firebaseapp.com",
     projectId: "alamanni-traslados-fa9c5",
-    storageBucket: "alamanni-traslados-fa9c5.appspot.com",
+    storageBucket: "alamanni-traslados-fa9c5",
     messagingSenderId: "119290167074",
     appId: "1:119290167074:web:5a8e5ae83e97f74e7cef7b",
     measurementId: "G-5QWZD0F4PK"
