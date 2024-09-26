@@ -180,7 +180,7 @@
       if (confirmDelete) {
           const usersRef = ref(db, 'users');
           remove(usersRef).then(() => {
-              alert('Todos los pasajeros se eliminaron');
+              alert('Todos los pasajeros se eliminaron (=');
               loadUsers();  // Recargar la lista
           }).catch(error => {
               console.error('Error al eliminar pasajeros:', error);
