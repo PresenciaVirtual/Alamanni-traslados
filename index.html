@@ -146,24 +146,8 @@
       }
   });
 
-  // Desactivar usuario por CLAVE
-  deleteForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const deleteClave = document.getElementById('deleteClave').value;
-
-      if (deleteClave) {
-          set(ref(db, 'users/' + deleteClave + '/active'), false)  // Se cambia el estado a inactivo
-              .then(() => {
-                  alert('Usuario desactivado');
-                  deleteForm.reset();
-                  loadUsers();
-              })
-              .catch(error => {
-                  console.error('Error al desactivar usuario:', error);
-              });
-      }
-  });
+  // Cargar y mostrar usuarios al abrir la página
+  window.addEventListener('load', loadUsers);
 
   // Cargar y mostrar usuarios
   function loadUsers() {
@@ -172,7 +156,7 @@
           const users = snapshot.val();
           userList.innerHTML = '';
           for (const clave in users) {
-              if (users[clave].active) {  // Solo se muestra usuarios activos
+              if (users[clave].active) {  // Solo se muestran usuarios activos
                   const li = document.createElement('li');
                   li.textContent = `Nombre: ${users[clave].nombre}, Clave: ${users[clave].clave}, Dni: ${users[clave].dni}`;
                   userList.appendChild(li);
@@ -180,9 +164,6 @@
           }
       });
   }
-
-  // Se cargan los usuarios
-  loadUsers();
 </script>
 
 </body>
