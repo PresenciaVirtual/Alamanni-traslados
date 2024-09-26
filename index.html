@@ -174,13 +174,13 @@
       });
   }
 
-  // Eliminar todos los pasajeros con confirmación
+  // Eliminar todos los pasajeros
   deleteAllBtn.addEventListener('click', function() {
-      const confirmDelete = confirm("¿Estás seguro de que quieres eliminar todos los pasajeros? Esta acción no se puede deshacer.");
+      const confirmDelete = confirm("¿Estás seguro de que queres eliminar todos los pasajeros? Esto no se puede deshacer");
       if (confirmDelete) {
           const usersRef = ref(db, 'users');
           remove(usersRef).then(() => {
-              alert('Todos los pasajeros han sido eliminados.');
+              alert('Todos los pasajeros se eliminaron');
               loadUsers();  // Recargar la lista
           }).catch(error => {
               console.error('Error al eliminar pasajeros:', error);
