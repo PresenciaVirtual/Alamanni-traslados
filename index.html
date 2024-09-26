@@ -63,6 +63,18 @@
             border-radius: 8px;
             color: #ffffff;
         }
+        .delete-all-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .delete-all-btn:hover {
+            background-color: #ff1a1a;
+        }
         @media (max-width: 768px) {
             .container {
                 max-width: 100%;
@@ -82,25 +94,22 @@
     <h1>Agregar y Actualizar Pasajeros</h1>
     <form id="userForm">
         <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="text" id="clave" placeholder="CLAVE (siempre en minuscula, ej: a1-mva011)" required>
-        <input type="text" id="dni" placeholder="Dni" required>
+        <input type="text" id="clave" placeholder="CLAVE (siempre en minúscula, ej: a1-mva011)" required>
+        <input type="text" id="dni" placeholder="DNI" required>
         <button type="submit">Agregar/Actualizar</button>
     </form>
-<!--
-    <h2>Desactivar Pasajero (Por ahora no tocar)</h2>
-    <form id="deleteForm">
-        <input type="text" id="deleteClave" placeholder="CLAVE para desactivar" required>
-        <button type="submit">Desactivar</button>
-    </form>
---> 
+
     <h2>Lista de Pasajeros</h2>
     <ul id="userList"></ul>
+
+    <!-- Botón para eliminar toda la lista -->
+    <button class="delete-all-btn" id="deleteAllBtn">Eliminar Todos los Pasajeros</button>
 </div>
 
 <script type="module">
   // Importa las funciones de Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+  import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
   // Configuración de Firebase
   const firebaseConfig = {
@@ -119,8 +128,8 @@
 
   // Referencias a los formularios y la lista de usuarios
   const userForm = document.getElementById('userForm');
-  const deleteForm = document.getElementById('deleteForm');
   const userList = document.getElementById('userList');
+  const deleteAllBtn = document.getElementById('deleteAllBtn');
 
   // Agregar o actualizar usuario
   userForm.addEventListener('submit', function(e) {
@@ -158,12 +167,26 @@
           for (const clave in users) {
               if (users[clave].active) {  // Solo se muestran usuarios activos
                   const li = document.createElement('li');
-                  li.textContent = `Nombre: ${users[clave].nombre}, Clave: ${users[clave].clave}, Dni: ${users[clave].dni}`;
+                  li.textContent = `Nombre: ${users[clave].nombre}, Clave: ${users[clave].clave}, DNI: ${users[clave].dni}`;
                   userList.appendChild(li);
               }
           }
       });
   }
+
+  // Eliminar todos los pasajeros con confirmación
+  deleteAllBtn.addEventListener('click', function() {
+      const confirmDelete = confirm("¿Estás seguro de que quieres eliminar todos los pasajeros? Esta acción no se puede deshacer.");
+      if (confirmDelete) {
+          const usersRef = ref(db, 'users');
+          remove(usersRef).then(() => {
+              alert('Todos los pasajeros han sido eliminados.');
+              loadUsers();  // Recargar la lista
+          }).catch(error => {
+              console.error('Error al eliminar pasajeros:', error);
+          });
+      }
+  });
 </script>
 
 </body>
